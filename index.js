@@ -1,4 +1,5 @@
 const input = [...document.querySelectorAll('input')];
+//use your firebase realtime database link here
 const url = 'https://intranetinternetlab-default-rtdb.firebaseio.com/.json';
 
 
@@ -7,7 +8,6 @@ const url = 'https://intranetinternetlab-default-rtdb.firebaseio.com/.json';
 
 document.getElementById('submit-but').addEventListener('click',submitForm);
 document.getElementById('submit-but').addEventListener('submit',submitForm);
-
 
 
 function submitForm(e) {
@@ -66,9 +66,10 @@ function submitForm(e) {
 
         // send request with json data
     xhr.send(JSON.stringify(postData));
+
+    resetForm();
     
 } 
-// reloadPage();
 
 
       
@@ -77,7 +78,7 @@ function submitForm(e) {
     //For GET operation
 document.getElementById('button2').addEventListener('click',loadUsers);
 
-function loadUsers(e){
+function loadUsers(){
     
     
    
@@ -107,12 +108,15 @@ function loadUsers(e){
          
         //for working of each delete button
         const deleteList = document.querySelectorAll('.delete');
+
+        //get unique id when delete button is pressed
         deleteList.forEach((element)=>{
                     element.addEventListener('click',(e)=>{
-
                         let deleteKey = e.target.id;
+                        let deletedEmail = users[deleteKey].email;
+                        
                         // alert(deleteKey);
-                        deleteData(deleteKey);
+                        deleteData(deleteKey,deletedEmail);
                         
 
                         
@@ -126,18 +130,18 @@ function loadUsers(e){
 
 
 
-function deleteData(toDeleteId){
+function deleteData(toDeleteId,deletedEmail){
     
     let deleteUrl = `https://intranetinternetlab-default-rtdb.firebaseio.com/${toDeleteId}.json`;
    
     
-    let xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
                      
             xhr.open("DELETE", deleteUrl, true);
         
         xhr.onreadystatechange = function(){
             if(this.status==200 && this.readyState==4){
-                alert('User-Id: '+toDeleteId+' deleted succefully');
+                    alert(/*'User-Id: '+toDeleteId+*/'\n User-email: '+deletedEmail+' deleted succefully');
             }
         }
         xhr.send();
@@ -146,13 +150,10 @@ function deleteData(toDeleteId){
 
 
 }
+function resetForm(){
+    document.getElementById('myForm').reset();
 
-//update remaining
-
-
-
-
+}
 
 
-
-
+//Update remaining
